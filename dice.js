@@ -1,7 +1,7 @@
 var myChart = document.getElementById("myChart").getContext('2d');
 
 var expectNumArray = Array(11);
-expectNumArray.fill("00");
+expectNumArray.fill("00"); //Expected number of occurrences
 var turn = 0;
 
 var dataLabelPlugin = {
@@ -26,7 +26,7 @@ var dataLabelPlugin = {
                     var padding = 5;
                     var position = element.tooltipPosition();
                     ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
-                    ctx.fillText("("+expectNum+")", position.x, position.y - (fontSize*3 / 2) - padding); //display expected number onto apperance num
+                    ctx.fillText("("+expectNum+")", position.x, position.y - (fontSize*3 / 2) - padding); //display expected number onto result numbers
                 })
             }
         })
@@ -37,8 +37,8 @@ var diceRecord = [];
 var histogramArray = Array(11);
 histogramArray.fill(0);
 var turn = 0;
-const LASTRESULTNUM = 8;
-var showhistory = !!1;
+const LASTRESULTNUM = 8; //The number of past result to display
+var showhistory = !!1; //True, To select showing past result or not
 
 var chart = new Chart(myChart, {
   type: 'bar',
@@ -88,26 +88,12 @@ function createHistogramArray(){
   }
 }
 
-function writeLastXResult(){
-  var lastXResult = Array(LASTRESULTNUM); // Array of String
-  lastXResult.fill("00");
-  if(showhistory){
-    for(var i = 0; i < Math.min(LASTRESULTNUM, diceRecord.length); i++){
-      var iResult = diceRecord[diceRecord.length-1-i];
-      lastXResult[LASTRESULTNUM-1-i] = (iResult < 10) ? "0" + iResult.toString() : iResult.toString();
-    }
-  }
-  for(var i = 0; i < LASTRESULTNUM; i++){
-    document.getElementById("lastXResult"+i.toString()).innerHTML = lastXResult[i].toString();
-  }
-}
-
 function writeTurnnum(){
   if(turn > 0){
     document.getElementById("turnnum").innerHTML = numeral(Math.ceil(turn/4)).format('0o') + " round    " + numeral(turn%4 ? turn%4 : 4).format('0o') + " turn";
   }
   else{
-    document.getElementById("turnnum").innerHTML = "wating to start...";
+    document.getElementById("turnnum").innerHTML = "Waiting for Start...";
   }
 }
 
@@ -120,30 +106,26 @@ function writeDiceResult(){
     document.getElementById("resulttext").innerHTML = "00";
   }
 }
-//
-// function writeExpctResult(){
-//   expectNumArray.fill("00");
-//   if(turn > 0){
-//     for(var i = 2; i < 13; i++){
-//       var expectNum = (i < 8) ? (i-1)*turn/36 : (13-i)*turn/36;
-//       expectNumArray[i-2] = (Math.round(expectNum) < 10) ? "0" + Math.round(expectNum).toString() : Math.round(expectNum).toString();
-//       document.getElementById("expectnum"+i.toString()).innerHTML = expectNumArray[i-2];
-//     }
-//   }
-//   else{
-//     for(var i = 2; i < 13; i++){
-//       document.getElementById("expectnum"+i.toString()).innerHTML = "00";
-//     }
-//   }
-//   console.log(expectNumArray);
-// }
+
+function writeLastXResult(){
+  var lastXResult = Array(LASTRESULTNUM);
+  lastXResult.fill("00");
+  if(showhistory){
+    for(var i = 0; i < Math.min(LASTRESULTNUM, diceRecord.length); i++){
+      var iResult = diceRecord[diceRecord.length-1-i];
+      lastXResult[LASTRESULTNUM-1-i] = (iResult < 10) ? "0" + iResult.toString() : iResult.toString();
+    }
+  }
+  for(var i = 0; i < LASTRESULTNUM; i++){
+    document.getElementById("lastXResult"+i.toString()).innerHTML = lastXResult[i].toString();
+  }
+}
 
 function refreshALL(){
   createHistogramArray();
   writeTurnnum();
   writeDiceResult();
   writeLastXResult();
-  // writeExpctResult();
   chart.update();
 }
 
@@ -169,6 +151,6 @@ document.getElementById("refreshbutton").onclick = function() {
 };
 
 document.getElementById("hidebutton").onclick = function() {
-  showhistory = !showhistory;
+  showhistory = !showhistory; //Change showing history or not
   refreshALL();
 };
