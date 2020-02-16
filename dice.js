@@ -3,6 +3,7 @@ var myChart = document.getElementById("myChart").getContext('2d');
 var expectNumArray = Array(11);
 expectNumArray.fill("00"); //Expected number of occurrences
 var turn = 0;
+var mersenneTwister = new MersenneTwister(new Date().getTime());
 
 var dataLabelPlugin = {
     afterDatasetsDraw: function (chart, easing) {
@@ -131,8 +132,8 @@ function refreshALL(){
 
 document.getElementById("castbutton").onclick = function() {
   turn++;
-  var dicenum1 = 1 + Math.floor( Math.random() * 6 );
-  var dicenum2 = 1 + Math.floor( Math.random() * 6 );
+  var dicenum1 = mersenneTwister.nextInt(1, 6 + 1);
+  var dicenum2 = mersenneTwister.nextInt(1, 6 + 1)
   var randnum = dicenum1 + dicenum2;
   diceRecord.push(randnum);
   refreshALL();
