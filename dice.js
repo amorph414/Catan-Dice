@@ -162,13 +162,13 @@ document.getElementById("hidebutton").onclick = doHide;
 
 document.addEventListener("keydown", (event) => {
   const keyName = event.key;
-  if(keyName == "c"){
+  if(keyName === "c"){
     doCast();
-  }else if(keyName == "u"){
+  }else if(keyName === "u"){
     doUndo();
-  }else if(keyName == "h"){
+  }else if(keyName === "h"){
     doHide();
-  }else if(keyName == "r"){
+  }else if(keyName === "r"){
     doRefresh();
   }
   if(keyName === " " && document.activeElement.tagName !== "BUTTON"){
