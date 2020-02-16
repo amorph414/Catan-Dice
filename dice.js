@@ -130,7 +130,7 @@ function refreshALL(){
   chart.update();
 }
 
-document.getElementById("castbutton").onclick = function() {
+const doCast = function() {
   turn++;
   var dicenum1 = mersenneTwister.nextInt(1, 6 + 1);
   var dicenum2 = mersenneTwister.nextInt(1, 6 + 1)
@@ -138,20 +138,44 @@ document.getElementById("castbutton").onclick = function() {
   diceRecord.push(randnum);
   refreshALL();
 };
+document.getElementById("castbutton").onclick = doCast;
 
-document.getElementById("undobutton").onclick = function() {
+const doUndo = function() {
   diceRecord.pop();
    (turn > 0) ? turn-- : turn = 0;
   refreshALL();
 };
+document.getElementById("undobutton").onclick = doUndo;
 
-document.getElementById("refreshbutton").onclick = function() {
+const doRefresh = function() {
   diceRecord.length = 0; // reset records
   turn = 0;
   refreshALL();
 };
+document.getElementById("refreshbutton").onclick = doRefresh;
 
-document.getElementById("hidebutton").onclick = function() {
+const doHide = function() {
   showhistory = !showhistory; //Change showing history or not
   refreshALL();
 };
+document.getElementById("hidebutton").onclick = doHide;
+
+document.addEventListener("keydown", (event) => {
+  const keyName = event.key;
+  if(keyName == "c"){
+    doCast();
+  }else if(keyName == "u"){
+    doUndo();
+  }else if(keyName == "h"){
+    doHide();
+  }else if(keyName == "r"){
+    doRefresh();
+  }
+  if(keyName === " " && document.activeElement.tagName !== "BUTTON"){
+    if(event.shiftKey){
+      doUndo();
+    }else{
+      doCast();
+    }
+  }
+});
